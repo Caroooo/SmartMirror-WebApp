@@ -1,0 +1,23 @@
+<mvc:View
+        controllerName="sap.ui.demo.wt.controller.Login"
+        xmlns:l="sap.ui.layout"
+        xmlns:mvc="sap.ui.core.mvc"
+        xmlns="sap.m">
+    <l:VerticalLayout
+            class="sapUiContentPadding"
+            width="100%">
+        <l:content>
+            <Label text="Smart Mirror Login"/>
+            <Input
+                    type="Text"
+                    placeholder="Enter Username"/>
+            <Input
+                    type="Password"
+                    placeholder="Enter password ..."/>
+            <HBox class="sapUiSmallMargin">
+                <Button text="Login" press="onLogin"/>
+                <Button text="Register" press="onRegister"/>
+            </HBox>
+        </l:content>
+    </l:VerticalLayout>
+</mvc:View>
