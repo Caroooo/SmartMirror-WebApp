@@ -10,7 +10,8 @@
         <VBox>
             <Title level="H3" text="Personal Information"/>
 
-            <Input
+            <Input  value="{/fullName}"
+                    valueLiveUpdate="true"
                     type="Text"
                     placeholder="Full Name"/>
             <RadioButtonGroup columns="2" width="500px">
@@ -19,17 +20,20 @@
                     <RadioButton id="male" text="Male"/>
                 </buttons>
             </RadioButtonGroup>
-            <Input
+            <Input value="{/year}"
+                    valueLiveUpdate="true"
                     type="Number"
                     placeholder="Year of Birth, f.ex.: 1990"/>
             <HBox class="sapUiSmallMargin">
-                <Input
+                <Input value="{/height}"
+                    valueLiveUpdate="true"
                         type="Number"
                         placeholder="Height f.ex.: 180"/>
                 <Text text="cm"/>
             </HBox>
             <HBox class="sapUiSmallMargin">
-                <Input
+                <Input value="{/weight}"
+                    valueLiveUpdate="true"
                         type="Number"
                         placeholder="Weight f.ex.: 70"/>
                 <Text text="kg"/>
@@ -37,21 +41,25 @@
         </VBox>
         <VBox>
             <Title level="H3" text="Login Information"/>
-            <Input
+            <Input value="{/email}"
+                    valueLiveUpdate="true"
                     type="Email"
                     placeholder="e-mail address"/>
-            <Input
+            <Input value="{/username}"
+                    valueLiveUpdate="true"
                     type="Text"
                     placeholder="username"/>
-            <Input
+            <Input value="{/password}"
+                    valueLiveUpdate="true"
                     type="Password"
                     placeholder="password"/>
-            <Input
+            <Input value="{/password}"
+                    valueLiveUpdate="true"
                     type="Password"
                     placeholder="repeat password"/>
 
         </VBox>
-        <Button text="Send" press="onSend"/>
+        <Button text="Send" press="onSignUp"/>
 
     </l:VerticalLayout>
 </mvc:View>
