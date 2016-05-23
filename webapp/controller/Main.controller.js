@@ -9,7 +9,9 @@ sap.ui.define([
         onInit: function () {
             this.config = new sap.ui.core.Configuration();
         },
-
+        onLogout : function(oEvent){
+            this.getOwnerComponent().getRouter().navTo("login");
+        }
 
     });
 });

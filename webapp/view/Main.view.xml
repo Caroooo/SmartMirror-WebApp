@@ -1,15 +1,80 @@
 <mvc:View
         controllerName="sap.ui.demo.wt.controller.Main"
-        xmlns:l="sap.ui.layout"
+        xmlns="sap.ui.table"
         xmlns:mvc="sap.ui.core.mvc"
-        xmlns="sap.m">
-    <l:VerticalLayout
+        xmlns:c="sap.ui.core"
+        xmlns:m="sap.m">
+    <m:Page
+            title="Smart Mirror"
             class="sapUiContentPadding"
-            width="100%">
-        <l:content>
-            <Title level="H1" text="Welcome USERNAME" />
+            showNavButton="false">
+        <m:headerContent>
+            <m:Button icon="sap-icon://log" press="onLogout"/>
+        </m:headerContent>
+        <m:ObjectHeader
+                title="FULL NAME">
+            <m:attributes>
+                <m:ObjectAttribute text="Gender: Female"/>
+                <m:ObjectAttribute text="Year of Birth: 1990"/>
+                <m:ObjectAttribute text="Height: 175 cm"/>
+                <m:ObjectAttribute text="Weight: 65 kg"/>
+            </m:attributes>
+        </m:ObjectHeader>
+        <Table id="table1"
+               rows="{/ProductCollection}"
+               visibleRowCount="7">
+            <toolbar>
+                <m:Toolbar>
+                    <m:content>
+                        <m:Title text="Reminders"/>
+                    </m:content>
+                </m:Toolbar>
+            </toolbar>
+            <columns>
+                <Column>
+                    <m:Label text="Title"/>
+                    <template>
+                        <m:Text text="Monday"/>
+                    </template>
+                </Column>
+                <Column>
+                    <m:Label text="Description"/>
+                    <template>
+                        <m:Text text="Monday"/>
+                    </template>
+                </Column>
+                <Column>
+                    <m:Label text="Week Day"/>
+                    <template>
+                        <m:Text text="Monday"/>
+                    </template>
+                </Column>
+                <Column>
+                    <m:Label text="Date"/>
+                    <template>
+                        <m:DatePicker value="{
+								path: 'DeliveryDate',
+								type: 'sap.ui.model.type.Date',
+								formatOptions: {source: {pattern: 'timestamp'}}
+							}"/>
+                    </template>
+                </Column>
+                <Column>
+                    <m:Label text="Recurrance"/>
+                    <template>
+                        <m:ComboBox value="{SupplierName}" items="{/Suppliers}">
+                            <c:Item text="{Name}"/>
+                        </m:ComboBox>
+                    </template>
+                </Column>
+                <Column>
+                    <m:Label text=" "/>
+                    <template>
+                        <m:Button text="change"/>
+                    </template>
+                </Column>
+            </columns>
+        </Table>
+    </m:Page>
 
-
-        </l:content>
-    </l:VerticalLayout>
 </mvc:View>
