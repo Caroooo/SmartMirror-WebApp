@@ -81,7 +81,7 @@
                 </Column>
             </columns>
         </Table>
-        <m:Button icon="sap-icon://add"/>
+        <m:Button text="add reminder" icon="sap-icon://add"/>
 
     </m:Page>
 
