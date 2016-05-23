@@ -70,11 +70,19 @@
                 <Column>
                     <m:Label text=" "/>
                     <template>
-                        <m:Button text="change"/>
+                        <m:Button icon="sap-icon://edit"/>
+                    </template>
+                </Column>
+                <Column>
+                    <m:Label text=" "/>
+                    <template>
+                        <m:Button icon="sap-icon://delete"/>
                     </template>
                 </Column>
             </columns>
         </Table>
+        <m:Button icon="sap-icon://add"/>
+
     </m:Page>
 
 </mvc:View>
