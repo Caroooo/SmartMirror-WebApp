@@ -1,0 +1,4 @@
+bower_components/
+node_modules/
+webapp/resources/
+smart-mirror-reminders.db

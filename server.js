@@ -37,6 +37,19 @@ app.post("/sign-up", function(request, response) {
     });
 });
 
+app.get("/:userId", function(request, response) {
+    var userId = request.params.userId;
+    db.get("SELECT * FROM users WHERE id=?", userId, function(err, row) {
+        if (err) {
+          response.send(err);
+        } else if (row) {
+          response.send(JSON.stringify(row));
+        } else {
+          response.send(JSON.stringify({error: "A user with the specified id doesn't exist."}));
+        }
+    });
+});
+
 var gracefulShutdown = function() {
   console.log("Received kill signal, shutting down gracefully.");
   server.close(function() {
@@ -44,18 +57,18 @@ var gracefulShutdown = function() {
     db.close();
     process.exit()
   });
-  
-   // if after 
+
+   // if after
    setTimeout(function() {
        console.error("Could not close connections in time, forcefully shutting down");
        process.exit()
   }, 10*1000);
 }
 
-// listen for TERM signal .e.g. kill 
+// listen for TERM signal .e.g. kill
 process.on ('SIGTERM', gracefulShutdown);
 
 // listen for INT signal e.g. Ctrl-C
-process.on ('SIGINT', gracefulShutdown);  
+process.on ('SIGINT', gracefulShutdown);
 
 var server = app.listen(3000);
