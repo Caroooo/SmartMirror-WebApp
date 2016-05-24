@@ -1,26 +1,18 @@
 sap.ui.define([
+    'jquery.sap.global',
     'sap/ui/core/mvc/Controller',
     'sap/ui/model/json/JSONModel',
     'sap/ui/model/SimpleType',
     'sap/ui/model/ValidateException'
 
-], function (Controller, JSONModel, SimpleType, ValidateException) {
+], function (jQuery, Controller, JSONModel, SimpleType, ValidateException) {
     "use strict";
     return Controller.extend("sap.ui.demo.wt.controller.Register", {
 
         onInit: function () {
-            var userModel = new JSONModel({
-                username: '',
-                pass: '',
-                fullName: '', 
-                gender: '',
-                year: '',
-                email: '', 
-                height: '',
-                weight: ''
-            });
-            this.getView().setModel(userModel);
+
             this.config = new sap.ui.core.Configuration();
+
 
             // attach handlers for validation errors
             sap.ui.getCore().attachValidationError(function (evt) {
@@ -40,10 +32,8 @@ sap.ui.define([
 
 
 
-
-
-
-            var userModel = this.getView().getModel().oData;
+        var that = this;
+            var userModel = this.getOwnerComponent().getModel("newUserModel").oData;
             $.ajax({
                 url: "sign-up",
                 method: "post",
@@ -52,7 +42,8 @@ sap.ui.define([
             }).done(function(msg) {
                 // Redirect to the page of the newly created users
                 // msg.id is the id of the newly created user
-                this.getOwnerComponent().getRouter().navTo("main");
+                var oRouter = sap.ui.core.UIComponent.getRouterFor(that);
+                oRouter.navTo("main");
             });
         },
         typeEMail : SimpleType.extend("email", {
