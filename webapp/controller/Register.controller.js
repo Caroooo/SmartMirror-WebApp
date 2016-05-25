@@ -1,11 +1,13 @@
 sap.ui.define([
     'jquery.sap.global',
     'sap/ui/core/mvc/Controller',
+    'sap/m/MessageBox',
+    'sap/m/MessageToast',
     'sap/ui/model/json/JSONModel',
     'sap/ui/model/SimpleType',
     'sap/ui/model/ValidateException'
 
-], function (jQuery, Controller, JSONModel, SimpleType, ValidateException) {
+], function (jQuery, Controller, MessageBox, MessageToast, JSONModel, SimpleType, ValidateException) {
     "use strict";
     return Controller.extend("sap.ui.demo.wt.controller.Register", {
 
@@ -30,7 +32,39 @@ sap.ui.define([
         },
         onSignUp : function(oEvent) {
 
+            // collect input controls
+            var view = this.getView();
+            var inputs = [
+                view.byId("emailId"),
+                view.byId("passwordId"),
+                view.byId("password2Id")
 
+            ];
+
+            // check that inputs are not empty
+            // this does not happen during data binding as this is only triggered by changes
+            jQuery.each(inputs, function (i, input) {
+                if (!input.getValue()) {
+                    input.setValueState("Error");
+                }
+            });
+
+            // check states of inputs
+            var canContinue = true;
+            jQuery.each(inputs, function (i, input) {
+                if ("Error" === input.getValueState()) {
+                    canContinue = false;
+                    return false;
+                }
+            });
+
+            // output result
+            if (canContinue) {
+                MessageToast.show("The input is correct. You could now continue to the next screen.");
+            } else {
+                jQuery.sap.require("sap.m.MessageBox");
+                MessageBox.alert("Complete your input first.");
+            }
 
         var that = this;
             var userModel = this.getOwnerComponent().getModel("newUserModel").oData;

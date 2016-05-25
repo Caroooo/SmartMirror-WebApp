@@ -41,7 +41,8 @@
         </VBox>
         <VBox>
             <Title level="H3" text="Login Information"/>
-            <Input value="{
+            <Input id="emailId"
+                    value="{
 					path : '/email',
 					type : '.typeEMail'
 				}"
@@ -52,7 +53,8 @@
                     valueLiveUpdate="true"
                     type="Text"
                     placeholder="username"/>
-            <Input   value="{
+            <Input  id="passwordId"
+                    value="{
 						path : '/password',
 						type : 'sap.ui.model.type.String',
 						constraints : {
@@ -62,8 +64,10 @@
 					}"
                     valueLiveUpdate="true"
                     type="Password"
-                    placeholder="password"/>
-            <Input  value="{
+                     valueStateText="Password has to have at least six digits"
+                     placeholder="password"/>
+            <Input  id="password2Id"
+                    value="{
 						path : '/password',
 						type : 'sap.ui.model.type.String',
 						constraints : {
@@ -73,6 +77,7 @@
 					}"
                     valueLiveUpdate="true"
                     type="Password"
+                    valueStateText="Password has to have at least six digits"
                     placeholder="repeat password"/>
 
         </VBox>
