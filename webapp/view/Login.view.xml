@@ -8,10 +8,12 @@
             width="100%">
         <l:content>
             <Label text="Smart Mirror Login"/>
-            <Input
+            <Input value="{/username}"
+                    valueLiveUpdate="true"
                     type="Text"
                     placeholder="Enter Username"/>
-            <Input
+            <Input value="{/password}"
+                    valueLiveUpdate="true"
                     type="Password"
                     placeholder="Enter password ..."/>
             <HBox class="sapUiSmallMargin">

@@ -1,10 +1,15 @@
 var express = require("express");
 var bodyParser = require('body-parser');
 var sqlite = require('sqlite3').verbose();
+var passport = require('passport');
+var cookieParser = require('cookie-parser');
+var session = require('express-session');
 var fs = require("fs");
 var compression = require('compression');
 var openModule = require('open');
 var serveIndex = require('serve-index');
+var User = require('./models/user');
+var Reminder = require('./models/reminder');
 
 var file = "smart-mirror-reminders.db";
 var exists = fs.existsSync(file);
@@ -20,72 +25,60 @@ app.use(express.static('webapp'));
 app.use(bodyParser.json()); // for parsing application/json
 app.use(bodyParser.urlencoded({
     extended: true
-})); // for parsing application/x-www-form-urlencoded
-db.serialize(function() {
-    if (!exists) {
-        db.run('CREATE TABLE users (id INTEGER PRIMARY KEY NOT NULL, username TEXT, password TEXT, full_name TEXT, gender TEXT, year TEXT, email TEXT, height INT, weight TEXT);');
-        db.run('CREATE TABLE reminders (id INTEGER PRIMARY KEY NOT NULL, user_id INT NOT NULL, title TEXT, recurrence TEXT, day TEXT, date TEXT, description TEXT, FOREIGN KEY(user_id) REFERENCES users(id) ON UPDATE CASCADE ON DELETE CASCADE);');
-    }
-});
+}));
+app.use(cookieParser());
+
+app.use(session({
+    secret: 'passport-sequelize-sample',
+    resave: false,
+    saveUninitialized: false
+}));
+
+app.use(passport.initialize());
+app.use(passport.session());
+
+passport.use(User.createStrategy());
+passport.serializeUser(User.serializeUser());
+passport.deserializeUser(User.deserializeUser());
 
 app.post("/sign-up", function(request, response) {
-    db.serialize(function() {
-        var stmt = db.prepare("INSERT INTO users (username, password, full_name, gender, year, email, height, weight) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
-        stmt.run(request.body.username, request.body.pass, request.body.fullName, request.body.gender, request.body.year, request.body.email, request.body.height, request.body.weight);
-        stmt.finalize();
-    });
-    db.get("SELECT last_insert_rowid()", function(err, row) {
-        response.send(JSON.stringify({
-            id: row['last_insert_rowid()']
-        }));
-    });
-});
-
-app.get("/:userId", function(request, response) {
-    var userId = request.params.userId;
-    var res = {};
-    db.get("SELECT * FROM users WHERE id=?", userId, function(err, row) {
+    User.register(request.body.username, request.body.password, function(err, registeredUser) {
         if (err) {
-            response.send(err);
-        } else if (row) {
-            res.user = row;
-            res.reminders = [];
-            db.each("SELECT * FROM reminders WHERE user_id=?", userId, function(err, row) {
-                if (err) {
-                    response.send(err);
-                } else {
-                    res.reminders.push(row);
-                }
-            }, function() {
-                response.send(JSON.stringify(res));
+            response.send({
+                error: err,
+                msg: "Sorry. That username already exists. Try again."
             });
         } else {
-            response.send(JSON.stringify({
-                error: "A user with the specified id doesn't exist."
-            }));
+            //registeredUser.role = 'user',
+            registeredUser.fullName = request.body.fullName;
+            registeredUser.gender = request.body.gender;
+            registeredUser.year = request.body.year;
+            registeredUser.email = request.body.email;
+            registeredUser.height = request.body.height;
+            registeredUser.weight = request.body.weight;
+            registeredUser.save();
+            passport.authenticate('local')(request, response, function() {
+                response.send(registeredUser);
+            });
         }
     });
 });
 
-app.put("/:userId", function(request, response) {
+app.post('/log-in', passport.authenticate('local'), function(request, response) {
+    response.send(request.user);
+});
+
+app.post("/:userId", function(request, response) {
     var userId = request.params.userId;
-    db.serialize(function() {
-        var stmt = db.prepare("INSERT INTO reminders (user_id, title, recurrence, day, date, description) VALUES (?, ?, ?, ?, ?, ?)");
-        stmt.run(userId, request.body.title, request.body.recurrence, request.body.day, request.body.date, request.body.description);
-        stmt.finalize();
-    });
-    db.get("SELECT last_insert_rowid()", function(err, row) {
-        if (err) {
-            response.send(JSON.stringify(err));
-        } else {
-            db.get("SELECT * FROM reminders WHERE id=?", row['last_insert_rowid()'], function(err, row) {
-                if (err) {
-                    response.send(JSON.stringify(err));
-                } else {
-                    response.send(JSON.stringify(row));
-                }
-            });
-        }
+    Reminder.create({
+        user_id: userId,
+        title: request.body.title,
+        recurrence: request.body.recurrence,
+        day: request.body.day,
+        date: request.body.date,
+        description: request.body.description
+    }).then(function(reminder) {
+        response.send(reminder);
     });
 });
 

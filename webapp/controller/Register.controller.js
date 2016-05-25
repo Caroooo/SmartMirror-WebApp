@@ -12,7 +12,6 @@ sap.ui.define([
     return Controller.extend("sap.ui.demo.wt.controller.Register", {
 
         onInit: function () {
-
             this.config = new sap.ui.core.Configuration();
 
 
@@ -100,5 +99,3 @@ sap.ui.define([
 
     });
 });
-
-
