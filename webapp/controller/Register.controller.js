@@ -10,11 +10,8 @@ sap.ui.define([
 ], function (jQuery, Controller, MessageBox, MessageToast, JSONModel, SimpleType, ValidateException) {
     "use strict";
     return Controller.extend("sap.ui.demo.wt.controller.Register", {
-
         onInit: function () {
             this.config = new sap.ui.core.Configuration();
-
-
             // attach handlers for validation errors
             sap.ui.getCore().attachValidationError(function (evt) {
                 var control = evt.getParameter("element");
@@ -30,14 +27,12 @@ sap.ui.define([
             });
         },
         onSignUp : function(oEvent) {
-
             // collect input controls
             var view = this.getView();
             var inputs = [
                 view.byId("emailId"),
                 view.byId("passwordId"),
                 view.byId("password2Id")
-
             ];
 
             // check that inputs are not empty
@@ -66,7 +61,7 @@ sap.ui.define([
             }
 
         var that = this;
-            var userModel = this.getOwnerComponent().getModel("newUserModel").oData;
+            var userModel = this.getOwnerComponent().getModel("userModel").oData;
             $.ajax({
                 url: "sign-up",
                 method: "post",

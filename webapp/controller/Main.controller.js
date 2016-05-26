@@ -1,16 +1,26 @@
-
 sap.ui.define([
     'sap/ui/core/mvc/Controller',
 
-], function (Controller) {
+], function(Controller) {
     "use strict";
     return Controller.extend("sap.ui.demo.wt.controller.Main", {
 
-        onInit: function () {
-            this.config = new sap.ui.core.Configuration();
-            var userId = this.getOwnerComponent().getModel("userModel").userId;
-
+        onInit: function() {
+            this.config = new sap.ui.core.Configuration
+            var userModel = this.getOwnerComponent().getModel("userModel");
             var oRouter = sap.ui.core.UIComponent.getRouterFor(this);
+            if (!userModel) {
+                oRouter.navTo("login");
+                return;
+            } else {
+                var userId = userModel.userId;
+                console.log(userId);
+                if (!userId) {
+                    console.log("Navigate to Login");
+                    oRouter.navTo("login");
+                    return;
+                }
+            }
             $.ajax({
                 url: userId,
                 method: "get"
@@ -21,12 +31,13 @@ sap.ui.define([
                 oRouter.navTo("main");
             });
         },
-        onLogout : function(oEvent){
+        onAfterRendering: {
+
+        },
+        onLogout: function(oEvent) {
             var oRouter = sap.ui.core.UIComponent.getRouterFor(this);
             oRouter.navTo("login");
         }
 
     });
 });
-
-

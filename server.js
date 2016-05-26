@@ -68,7 +68,22 @@ app.post('/log-in', passport.authenticate('local'), function(request, response) 
     response.send(request.user);
 });
 
-app.post("/:userId", function(request, response) {
+var isAuthenticated = function(request, response, next) {
+    if (request.isAuthenticated()) {
+        return next();
+    }
+    response.status(404).send('Unautherized access!');
+}
+
+app.get("/:userId", isAuthenticated, function(request, response) {
+    var userId = request.params.userId;
+    User.findById(userId, function(err, result) {
+      console.log(result);
+      response.send(result);
+    });
+});
+
+app.post("/:userId", isAuthenticated, function(request, response) {
     var userId = request.params.userId;
     Reminder.create({
         user_id: userId,

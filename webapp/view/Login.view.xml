@@ -8,11 +8,13 @@
             width="100%">
         <l:content>
             <Label text="Smart Mirror Login"/>
-            <Input value="{/username}"
+            <Input id='username'
+              value="{/username}"
                     valueLiveUpdate="true"
                     type="Text"
                     placeholder="Enter Username"/>
-            <Input value="{/password}"
+            <Input id='password'
+              value="{/password}"
                     valueLiveUpdate="true"
                     type="Password"
                     placeholder="Enter password ..."/>
